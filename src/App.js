@@ -1,13 +1,34 @@
 import React, { useState } from 'react';
 import switch_img  from './switch_icon.png';
 import './App.css';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC0Ov_9VDZ05OyXwHJrbkiF2337wiJFkJ0",
+  authDomain: "translator-1c80f.firebaseapp.com",
+  projectId: "translator-1c80f",
+  storageBucket: "translator-1c80f.appspot.com",
+  messagingSenderId: "461771264943",
+  appId: "1:461771264943:web:df81337dafde5322d9555a",
+  measurementId: "G-FHVHDJEG9V"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // VoiceTranslator component for translating spoken input in real-time
 function VoiceTranslator() {
   // state to hold current language code
   const [currentLang, setCurrentLang] = useState('en');
   // state to hold new language code to translate to
-  const [newLang, setNewLang] = useState('ar');
+  const [newLang, setNewLang] = useState('es');
   // state to hold current spoken input
   const [transcript, setTranscript] = useState('');
   // state to hold translated text
@@ -30,63 +51,6 @@ function VoiceTranslator() {
     { code: 'zh', name: 'Chinese' },
     { code: 'ru', name: 'Russian' }
   ];
-
-  // ...
-
-
-  // const languageOptions = [
-  //   { code: 'af', name: 'Afrikaans' },
-  //   { code: 'ar', name: 'Arabic' },
-  //   { code: 'bn', name: 'Bengali' },
-  //   { code: 'bs-Latn', name: 'Bosnian (Latin)' },
-  //   { code: 'bg', name: 'Bulgarian' },
-  //   { code: 'ca', name: 'Catalan' },
-  //   { code: 'zh-Hans', name: 'Chinese Simplified' },
-  //   { code: 'zh-Hant', name: 'Chinese Traditional' },
-  //   { code: 'hr', name: 'Croatian' },
-  //   { code: 'cs', name: 'Czech' },
-  //   { code: 'da', name: 'Danish' },
-  //   { code: 'nl', name: 'Dutch' },
-  //   { code: 'en', name: 'English' },
-  //   { code: 'et', name: 'Estonian' },
-  //   { code: 'fi', name: 'Finnish' },
-  //   { code: 'fr', name: 'French' },
-  //   { code: 'de', name: 'German' },
-  //   { code: 'el', name: 'Greek' },
-  //   { code: 'ht', name: 'Haitian Creole' },
-  //   { code: 'he', name: 'Hebrew' },
-  //   { code: 'hi', name: 'Hindi' },
-  //   { code: 'hu', name: 'Hungarian' },
-  //   { code: 'is', name: 'Icelandic' },
-  //   { code: 'id', name: 'Indonesian' },
-  //   { code: 'it', name: 'Italian' },
-  //   { code: 'ja', name: 'Japanese' },
-  //   { code: 'km', name: 'Khmer' },
-  //   { code: 'ko', name: 'Korean' },
-  //   { code: 'lv', name: 'Latvian' },
-  //   { code: 'lt', name: 'Lithuanian' },
-  //   { code: 'ms', name: 'Malay' },
-  //   { code: 'mt', name: 'Maltese' },
-  //   { code: 'no', name: 'Norwegian' },
-  //   { code: 'fa', name: 'Persian' },
-  //   { code: 'pl', name: 'Polish' },
-  //   { code: 'pt', name: 'Portuguese' },
-  //   { code: 'ro', name: 'Romanian' },
-  //   { code: 'ru', name: 'Russian' },
-  //   { code: 'sr-Cyrl', name: 'Serbian (Cyrillic)' },
-  //   { code: 'sr-Latn', name: 'Serbian (Latin)' },
-  //   { code: 'sk', name: 'Slovak' },
-  //   { code: 'sl', name: 'Slovenian' },
-  //   { code: 'es', name: 'Spanish' },
-  //   { code: 'sv', name: 'Swedish' },
-  //   { code: 'th', name: 'Thai' },
-  //   { code: 'tr', name: 'Turkish' },
-  //   { code: 'uk', name: 'Ukrainian' },
-  //   { code: 'ur', name: 'Urdu' },
-  //   { code: 'vi', name: 'Vietnamese' },
-  //   { code: 'cy', name: 'Welsh' },
-  //   { code: 'yi', name: 'Yiddish' }
-  // ];
 
     /**
    * handleSwitch is a function to handle switching of languages for translation
@@ -116,7 +80,7 @@ function VoiceTranslator() {
     // Resets the user's input and translations
     setTranslatedText('');
     setTranscript('');
-    // Stops and abort the recognition process if recogntion object exists
+    // Stops and aborts the recognition process if the recognition object exists
     if (recognition) {
       recognition.stop();
       recognition.abort();
@@ -147,7 +111,13 @@ function VoiceTranslator() {
   
     // Starts the recognition process
     recognition.start();
+  
+    // Stops the recognition process after 5 seconds
+    setTimeout(() => {
+      recognition.stop();
+    }, 5000);
   }
+  
   
 
   /**
@@ -190,9 +160,14 @@ function VoiceTranslator() {
 
   return (
     <div className="voice_to_text">
-      <h1>Voice Translator</h1>
-      
-      <textarea className="convert_text" id="convert_text" value={translatedText ? translatedText : transcript} readOnly></textarea>
+      <h1>Conversation Translator</h1>
+  
+      <textarea
+        className="convert_text"
+        id="convert_text"
+        value={translatedText ? translatedText : transcript}
+        readOnly
+      ></textarea>
   
       <button id="click_to_convert" onClick={handleClickToConvert}>
         Input
@@ -201,28 +176,43 @@ function VoiceTranslator() {
         Translate
       </button>
       <button id="switch_btn" onClick={handleSwitch} style={{ position: 'relative' }}>
-        <img src={switch_img} alt="Switch" style={{ height: '50px', width: '50px', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} />
+        <img
+          src={switch_img}
+          alt="Switch"
+          style={{
+            height: '50px',
+            width: '50px',
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
       </button>
   
-      <div style={{ marginTop: '20px' }}>
-  <label>Current Language:</label>
-  <select value={currentLang} onChange={(e) => setCurrentLang(e.target.value)}>
-    {languageOptions.map((option) => (
-      <option key={option.code} value={option.code}>{option.name}</option>
-    ))}
-  </select>
-</div>
-<div>
-  <label>New Language:</label>
-  <select value={newLang} onChange={(e) => setNewLang(e.target.value)}>
-    {languageOptions.map((option) => (
-      <option key={option.code} value={option.code}>{option.name}</option>
-    ))}
-  </select>
-</div>
-
+      <div style={{ marginTop: '20px', justifyContent: 'space-between' }}>
+        <label>Current Language: </label>
+        <select value={currentLang} onChange={(e) => setCurrentLang(e.target.value)}>
+          {languageOptions.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label>New Language: </label>
+        <select value={newLang} onChange={(e) => setNewLang(e.target.value)}>
+          {languageOptions.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
+  
   
 }
 

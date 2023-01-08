@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  transform: scale(1.01);
 }
 
 body {
@@ -15,8 +16,10 @@ body {
 }
 
 .voice_to_text {
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   text-align: center;
+  margin: 0 auto;
 }
 
 #convert_text {
@@ -26,7 +29,7 @@ body {
   resize: none;
   padding: 10px;
   font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   vertical-align: middle;
 }
 
@@ -36,7 +39,8 @@ h1 {
 }
 
 button {
-  width: 20%;
+  width: 23%;
+  height: 40px;
   padding: 12px 20px;
   background: #0ea4da;
   border: 0;
@@ -46,10 +50,21 @@ button {
   margin-left: 20px;
 }
 
+
 button#switch_btn {
   vertical-align: bottom;
-  width: 20%;
   height: 40px;
   border: none;
 }
 
+@media (max-width: 800px) {
+  .voice_to_text {
+    width: 80%;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  #convert_text {
+    height: 150px;
+  }
+}
