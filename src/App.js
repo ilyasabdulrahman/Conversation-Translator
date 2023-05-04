@@ -4,24 +4,28 @@ import './App.css';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC0Ov_9VDZ05OyXwHJrbkiF2337wiJFkJ0",
-  authDomain: "translator-1c80f.firebaseapp.com",
-  projectId: "translator-1c80f",
-  storageBucket: "translator-1c80f.appspot.com",
-  messagingSenderId: "461771264943",
-  appId: "1:461771264943:web:df81337dafde5322d9555a",
-  measurementId: "G-FHVHDJEG9V"
+  apiKey: "Key",
+  authDomain: "domain",
+  projectId: "projectid",
+  storageBucket: "storage",
+  messagingSenderId: "messageid",
+  appId: "appid",
+  measurementId: "measurementid"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+
 
 // VoiceTranslator component for translating spoken input in real-time
 function VoiceTranslator() {
@@ -39,16 +43,20 @@ function VoiceTranslator() {
   // array of language options with code and name
   const languageOptions = [
     { code: 'en', name: 'English' },
-    { code: 'ar', name: 'Arabic' },
+    { code: 'es', name: 'Spanish' },
     { code: 'fr', name: 'French' },
+    { code: 'it', name: 'Italian' },
+    { code: 'ar', name: 'Arabic' },
     { code: 'de', name: 'German' },
     { code: 'hi', name: 'Hindi' },
-    { code: 'it', name: 'Italian' },
     { code: 'ja', name: 'Japanese' },
     { code: 'ko', name: 'Korean' },
     { code: 'pt', name: 'Portuguese' },
-    { code: 'es', name: 'Spanish' },
     { code: 'zh', name: 'Chinese' },
+    { code: 'ru', name: 'Russian' },
+    { code: 'nl', name: 'Dutch' },
+    { code: 'pl', name: 'Polish' },
+    { code: 'tr', name: 'Turkish' },
     { code: 'ru', name: 'Russian' }
   ];
 
@@ -76,7 +84,7 @@ function VoiceTranslator() {
  * with the latest transcript and adds it to the transcripts state array.
  *
  */
-   function handleClickToConvert() {
+  function handleClickToConvert() {
     // Resets the user's input and translations
     setTranslatedText('');
     setTranscript('');
@@ -117,8 +125,6 @@ function VoiceTranslator() {
       recognition.stop();
     }, 5000);
   }
-  
-  
 
   /**
  * handleTranslate is a function that is called when a user clicks the 'Translate' button to initiate translation.
@@ -126,38 +132,59 @@ function VoiceTranslator() {
  * to the new language and updates the translatedText state with the translated text. It also uses the
  * Web Speech API's SpeechSynthesisUtterance object to speak the translated text.
  */
-   function handleTranslate() {
-    // Sets the method/option for the request to the Microsoft Translator Text API
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'X-RapidAPI-Key': 'c046f96e16mshe7b297b47722d38p123d49jsn2484bd64abd4',
-        'X-RapidAPI-Host': 'microsoft-translator-text.p.rapidapi.com'
-      },
-      body:  `[{"Text": "${transcript}"}]` // Include the transcript in the request body
-    };
-    
-    // Sends a request to the Microsoft Translator Text API to translate the transcript from the current language to the new language
-    fetch(`https://microsoft-translator-text.p.rapidapi.com/translate?to%5B0%5D=${newLang}&api-version=3.0&profanityAction=NoAction&fromScript=${currentLang}&textType=plain`, options)
-      .then(response => response.json()) // Parse the response as JSON
-      .then(response => {
-        // Gets the translated text from the response
-        const translatedText = response[0].translations[0].text;
-        // Updates the translatedText state with the translated text
-        setTranslatedText(translatedText);
-        // Creates a new SpeechSynthesisUtterance object with the translated text
-        const utterance = new window.SpeechSynthesisUtterance(translatedText);
-        // Sets the language of the utterance to the new language
-        utterance.lang = newLang;
-        // Uses the Web Speech API's speechSynthesis object to speak the translated text
-        window.speechSynthesis.speak(utterance);
-      })
-      // Logs any error messages that occur during the execution of the code
-      .catch(err => console.error(err));
-  }  
-   
+  function handleTranslate() {
+    const { v4: uuidv4 } = require('uuid');
 
+    let key = "key";
+    let endpoint = "https://api.cognitive.microsofttranslator.com";
+    let location = "region";
+
+    let requestBody = JSON.stringify([{
+        'text': transcript
+    }]);
+
+    let requestParams = new URLSearchParams({
+        'api-version': '3.0',
+        'from': currentLang,
+        'to': newLang
+    }).toString();
+
+    fetch(`${endpoint}/translate?${requestParams}`, {
+        method: 'POST',
+        headers: {
+            'Ocp-Apim-Subscription-Key': key,
+            'Ocp-Apim-Subscription-Region': location,
+            'Content-Type': 'application/json',
+            'X-ClientTraceId': uuidv4().toString()
+        },
+        body: requestBody
+    })
+    .then(response => response.json())
+    // .then(data => console.log(JSON.stringify(data, null, 4)))
+    .then(data => {
+      const translatedText = data[0].translations[0].text;
+      // Updates the translatedText state with the translated text
+      setTranslatedText(translatedText);
+      // Creates a new SpeechSynthesisUtterance object with the translated text
+      const utterance = new window.SpeechSynthesisUtterance(translatedText);
+      // Sets the language of the utterance to the new language
+      utterance.lang = newLang;
+      // Uses the Web Speech API's speechSynthesis object to speak the translated text
+      let voices = window.speechSynthesis.getVoices();
+      for (var i = 0; i < voices.length; i++) {
+        if (voices[i].lang.includes(newLang)) {
+          utterance.voice = voices[i];
+          console.log(utterance.voice);
+          console.log('ok');
+          break;
+        }
+      console.log(voices);
+    } 
+    window.speechSynthesis.speak(utterance);
+    })
+    .catch(error => console.error(error));
+  }
+   
   return (
     <div className="voice_to_text">
       <h1>Conversation Translator</h1>
@@ -212,8 +239,6 @@ function VoiceTranslator() {
       </div>
     </div>
   );
-  
-  
 }
 
 export default VoiceTranslator;
