@@ -1,5 +1,5 @@
 # Conversation Translator
-Try it here! https://translator-1c80f.web.app/
+Demo: https://translator-1c80f.web.app/ <br />
 <br />
 This is the frontend web application for the Conversation Translator, a powerful tool that translates up to 15 of the world's most popular languages in real-time. With this application, you can easily convert spoken input into text and translate it into a new language of your choice. It provides a seamless and user-friendly experience for multilingual conversations. <br />
 
