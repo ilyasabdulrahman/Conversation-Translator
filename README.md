@@ -10,14 +10,6 @@ Language switching: The application allows you to switch between the current lan
 Language selection: You can choose the current and new languages from a list of available options. The supported languages include English, Spanish, French, Italian, Arabic, German, Hindi, Japanese, Korean, Portuguese, Chinese, Dutch, Polish, Turkish, and Russian. <br />
 Text-to-speech synthesis: The translated text can be pronounced using AWS Polly's text-to-speech synthesis. The spoken translation is played through the integrated audio player, providing an immersive experience. <br />
 
-## Technologies
-React - Frontend <br />
-AWS - Utilized AWS SDK to access AWS Polly for Speech Synthesis <br />
-Azure - Handle Translations using Microsoft Translator Text API <br />
-Web Speech API - Specech Recognition
-JSX - Used in React component for rendering HTML-like syntax
-Firebase - Hosting Service
-
 ## Usage
 1. On the Conversation Translator web app, select the current language and the language you want to translate to from the respective dropdown menus. <br />
 2. Click the "Input" button to enable speech recognition. Start speaking, and your words will be transcribed in real-time in the text area. <br >
@@ -25,3 +17,10 @@ Firebase - Hosting Service
 4. To switch between the current and new languages, click the switch button. This allows you to change the language settings on the fly.
 5. You can listen to the translated text by playing the audio through the integrated audio player.
 
+## Technologies
+React - Frontend <br />
+AWS - Utilized AWS SDK to access AWS Polly for Speech Synthesis <br />
+Azure - Handle Translations using Microsoft Translator Text API <br />
+Web Speech API - Specech Recognition <br />
+JSX - Used in React component for rendering HTML-like syntax <br />
+Firebase - Hosting Service <br />
